@@ -26,50 +26,6 @@
                   Nuevo card
                 </q-tooltip>
               </q-btn>
-              <!-- <q-btn
-                class="q-ma-sm"
-                round
-                icon="get_app"
-                color="primary"
-                size="md"
-                @click="exportTable"
-              >
-                <q-tooltip>
-                  Exportar
-                </q-tooltip>
-              </q-btn> -->
-              <!-- <q-btn
-                class="q-ml-sm"
-                round
-                @click="$q.fullscreen.toggle()"
-                :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
-                color="primary"
-                size="md"
-              >
-                <q-tooltip>
-                  Pantalla completa
-                </q-tooltip>
-              </q-btn> -->
-            </div>
-            <div class="col-md-2">
-              <q-input
-                v-model="text"
-                placeholder="Buscar"
-                @input="getRecords"
-                debounce="1000"
-                outlined
-                dense
-              >
-                <template v-slot:append>
-                  <q-icon
-                    v-if="text !== ''"
-                    name="close"
-                    @click="clearSearch"
-                    class="cursor-pointer"
-                  />
-                  <q-icon name="search" />
-                </template>
-              </q-input>
             </div>
           </div>
         </q-card-section>
@@ -149,24 +105,6 @@
             </div>
           </q-card-section>
           <q-separator color="grey-4" />
-          <!-- <div
-            v-if="records.length"
-            class="q-pa-lg flex flex-center"
-          >
-            <q-pagination
-              v-model="current"
-              :max="response.lastPage"
-              direction-links
-              boundary-links
-              icon-first="skip_previous"
-              icon-last="skip_next"
-              icon-prev="fast_rewind"
-              icon-next="fast_forward"
-              @input="getRecords"
-              boundary-numbers
-              :max-pages="6"
-            />
-          </div> -->
         </q-card>
       </div>
     </div>
@@ -212,7 +150,6 @@ import { useQuasar } from 'quasar'
 const title = 'Cards'
 const records = ref([])
 const confirm = ref(false)
-const text = ref('')
 const $q = useQuasar()
 
 onMounted(() => {
@@ -221,7 +158,6 @@ onMounted(() => {
 
 async function getRecords () {
   api.get('cards').then(({ data }) => {
-    console.log({ data })
     records.value = data
   })
 }
@@ -233,7 +169,6 @@ async function deleteRecord (id) {
     cancel: true,
     persistent: true
   }).onOk(() => {
-    // console.log('>>>> OK')
     api.delete(`cards/${id}`).then(res => {
       getRecords()
       $q.notify({

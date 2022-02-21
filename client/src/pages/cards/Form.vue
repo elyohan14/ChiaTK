@@ -66,37 +66,10 @@
               <q-list separator>
 
           <q-item v-if="form.filenamep">
-            <!-- <q-item-section>
-              <q-item-label class="full-width ellipsis">
-                {{ form.filename }}
-              </q-item-label>
-
-              <q-item-label caption>
-                Status: {{ file.__status }}
-              </q-item-label>
-
-              <q-item-label caption>
-                {{ file.__sizeLabel }} / {{ file.__progressLabel }}
-              </q-item-label>
-            </q-item-section> -->
-
             <q-item-section
-
             >
               <q-img :src="form.filenamep"/>
             </q-item-section>
-
-            <!-- <q-item-section top side>
-              <q-btn
-                class="gt-xs"
-                size="12px"
-                flat
-                dense
-                round
-                icon="delete"
-                @click="scope.removeFile(file)"
-              />
-            </q-item-section> -->
           </q-item>
 
         </q-list>
@@ -132,10 +105,10 @@ import { useRoute, useRouter } from 'vue-router'
 
 const form = ref({})
 const title = 'Cards'
-const subtitle = 'Nuevo card'
-const router = useRouter()
 const route = useRoute()
 const id = route.params.id
+const subtitle = id ? 'Editar card' : 'Nuevo card'
+const router = useRouter()
 
 const rules = {
   title: { required },
@@ -153,16 +126,12 @@ onMounted(() => {
 
 async function getRecord () {
   api.get(`cards/${id}`).then(({ data }) => {
-    console.log({ data })
     form.value = data
   })
 }
 
 async function save () {
-  console.log(route.params)
-  console.log({ id })
   await v$.value.$validate()
-  console.log(form.value)
 
   // Uso el FormData para poder enviar la imagen al backend
   const formData = new FormData()
@@ -193,6 +162,5 @@ async function fileAdded (file) {
 
   form.value.file = file[0]
   form.value.filename = file[0].name
-  console.log(form.value)
 }
 </script>
